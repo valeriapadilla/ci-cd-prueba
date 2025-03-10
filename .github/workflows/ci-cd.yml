@@ -39,7 +39,6 @@ jobs:
       - name: Run Tests
         working-directory: prueba.Tests
         run: dotnet test --no-build --configuration Release
-
   publish:
     needs: build-test
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
@@ -60,15 +59,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Login to Amazon ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 \
-            | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
+      - name: Publish .NET App
+        working-directory: prueba
+        run: dotnet publish -c Release -o publish
 
-      - name: Publish Docker Image to Amazon ECR
-        working-directory: ./prueba/
-        run: |
-          dotnet publish -c Release \
-            -p:ContainerRepository=${{ secrets.REPOSITORY }} \
-            -p:RuntimeIdentifier=linux-x64
-          docker push ${{ secrets.REPOSITORY }} --all-tags
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.REPOSITORY }} -f dockerfile .
+
+      - name: Push Docker Image to Amazon ECR
+        run: docker push ${{ secrets.REPOSITORY }} --all-tags
