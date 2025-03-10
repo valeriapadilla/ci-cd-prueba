@@ -61,6 +61,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
+        working-directory: prueba
         run: |
           aws ecr get-login-password --region us-east-1 \
             | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
