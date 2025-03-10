@@ -29,9 +29,11 @@ jobs:
         run: dotnet restore prueba.csproj
 
       - name: Build project
+        working-directory: prueba
         run: dotnet build --no-restore --configuration Release
 
       - name: Run Tests
+        working-directory: prueba.Tests
         run: dotnet test --no-build --configuration Release
 
   build-push:
