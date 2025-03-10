@@ -5,8 +5,8 @@ on:
     branches:
       - main
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 permissions:
   contents: read
@@ -56,5 +56,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dotnet-app:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/dotnet-app:latest
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techtrendemporium-app:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/techtrendemporium-app:latest
