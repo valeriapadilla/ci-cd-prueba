@@ -25,7 +25,8 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Restore dependencies
-        run: dotnet restore
+        working-directory: prueba
+        run: dotnet restore prueba.csproj
 
       - name: Build project
         run: dotnet build --no-restore --configuration Release
