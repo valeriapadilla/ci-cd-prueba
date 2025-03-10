@@ -59,6 +59,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 \
+            | docker login --username AWS --password-stdin ${{ secrets.REPOSITORY }}
+
       - name: Publish .NET App
         working-directory: prueba
         run: dotnet publish -c Release -o publish
