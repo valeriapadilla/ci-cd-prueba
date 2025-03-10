@@ -32,6 +32,10 @@ jobs:
         working-directory: prueba
         run: dotnet build --no-restore --configuration Release
 
+      - name: Build Tests
+        working-directory: prueba.Tests
+        run: dotnet build --configuration Release
+
       - name: Run Tests
         working-directory: prueba.Tests
         run: dotnet test --no-build --configuration Release
