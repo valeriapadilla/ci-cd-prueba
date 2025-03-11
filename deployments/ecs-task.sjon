@@ -1,13 +1,13 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:116981779724:task-definition/TechTrendEmporium:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:116981779724:task-definition/TTE-Task:1",
     "containerDefinitions": [
         {
-            "name": "ttemporium-latest",
-            "image": "116981779724.dkr.ecr.us-east-1.amazonaws.com/t3m/ttemporium:latest",
+            "name": "weather-api",
+            "image": "116981779724.dkr.ecr.us-east-1.amazonaws.com/t3m/ttemporium",
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "ttemporium-latest-8080-tcp",
+                    "name": "weather-api-8080-tcp",
                     "containerPort": 8080,
                     "hostPort": 8080,
                     "protocol": "tcp",
@@ -23,7 +23,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/TechTrendEmporium",
+                    "awslogs-group": "/ecs/TTE-Task",
                     "mode": "non-blocking",
                     "awslogs-create-group": "true",
                     "max-buffer-size": "25m",
@@ -35,7 +35,8 @@
             "systemControls": []
         }
     ],
-    "family": "TechTrendEmporium",
+    "family": "TTE-Task",
+    "taskRoleArn": "arn:aws:iam::116981779724:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::116981779724:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "revision": 1,
@@ -56,6 +57,9 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.28"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "ecs.capability.execution-role-ecr-pull"
@@ -84,7 +88,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2025-03-10T15:52:54.009Z",
+    "registeredAt": "2025-03-11T13:54:07.360Z",
     "registeredBy": "arn:aws:iam::116981779724:root",
     "enableFaultInjection": false,
     "tags": []
