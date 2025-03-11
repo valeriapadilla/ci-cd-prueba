@@ -41,7 +41,7 @@ jobs:
         run: dotnet test --no-build --configuration Release
   publish:
     needs: build-test
-    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -73,3 +73,24 @@ jobs:
 
       - name: Push Docker Image to Amazon ECR
         run: docker push ${{ secrets.REPOSITORY }} --all-tags
+  deploy:
+    needs: publish
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ./deployments/ecs-task.json
+          service: weatherservice
+          cluster: TTE-Cluster
+          wait-for-service-stability: true
